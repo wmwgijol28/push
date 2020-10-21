@@ -6,19 +6,12 @@
  * Time: 15:08
  */
 
-namespace Ucar\Push;
+namespace Yinyi\Push;
 
 use Illuminate\Support\Facades\Cache;
-use Ucar\Push\Models\TemplateALiDaYu;
-use Ucar\Push\Models\TemplateContentSms;
-use Ucar\Push\Models\TemplateJiGuang;
-use Ucar\Push\Models\TemplateMessageConsumption;
-use Ucar\Push\Models\TemplateMessageCredit;
-use Ucar\Push\Models\TemplateMessageIou;
-use Ucar\Push\Models\TemplateMessageServeInforms;
-use Ucar\Push\Models\Templates;
-use Ucar\Push\Models\TemplateWeChat;
-use Ucar\Push\Models\TemplateYouYi;
+use Yinyi\Push\Models\TemplateJiGuang;
+use Yinyi\Push\Models\Templates;
+use Yinyi\Push\Models\TemplateWeChat;
 
 class PushInfo
 {
@@ -379,85 +372,6 @@ class PushInfo
         return $templates;
     }
 
-    /**
-     * @return TemplateMessageServeInforms|null
-     */
-    public function getTemplateServeInforms()
-    {
-        $templatesId = $this->templates->getId();
-
-        if ($this->notCache) {
-            return TemplateMessageServeInforms::where('templates_id', $templatesId)
-                ->first();
-        }
-        $template = Cache::tags(['pushMessage', $this->key])
-            ->rememberForever('Template:MessageServeInforms:ID:' . $templatesId, function () use ($templatesId) {
-                return TemplateMessageServeInforms::where('templates_id', $templatesId)
-                    ->first();
-            });
-
-        return $template;
-    }
-
-    /**
-     * @return TemplateMessageIou|null
-     */
-    public function getTemplateIou()
-    {
-        $templatesId = $this->templates->getId();
-
-        if ($this->notCache) {
-            return TemplateMessageIou::where('templates_id', $templatesId)
-                ->first();
-        }
-        $template = Cache::tags(['pushMessage', $this->key])
-            ->rememberForever('Template:MessageIou:ID:' . $templatesId, function () use ($templatesId) {
-                return TemplateMessageIou::where('templates_id', $templatesId)
-                    ->first();
-            });
-
-        return $template;
-    }
-
-    /**
-     * @return TemplateMessageCredit|null
-     */
-    public function getTemplateCredit()
-    {
-        $templatesId = $this->templates->getId();
-
-        if ($this->notCache) {
-            return TemplateMessageCredit::where('templates_id', $templatesId)
-                ->first();
-        }
-        $template = Cache::tags(['pushMessage', $this->key])
-            ->rememberForever('Template:MessageCredit:ID:' . $templatesId, function () use ($templatesId) {
-                return TemplateMessageCredit::where('templates_id', $templatesId)
-                    ->first();
-            });
-
-        return $template;
-    }
-
-    /**
-     * @return TemplateMessageCredit|null
-     */
-    public function getTemplateConsumption()
-    {
-        $templatesId = $this->templates->getId();
-
-        if ($this->notCache) {
-            return TemplateMessageConsumption::where('templates_id', $templatesId)
-                ->first();
-        }
-        $template = Cache::tags(['pushMessage', $this->key])
-            ->rememberForever('Template:MessageConsumption:ID:' . $templatesId, function () use ($templatesId) {
-                return TemplateMessageConsumption::where('templates_id', $templatesId)
-                    ->first();
-            });
-
-        return $template;
-    }
 
     //极光模板
     public function getTemplateJiGuang()
@@ -495,59 +409,6 @@ class PushInfo
         return $templateWeChat;
     }
 
-    //有易模板
-    public function getTemplateYouYi()
-    {
-        $templatesId = $this->templates->getId();
-
-        if ($this->notCache) {
-            return TemplateYouYi::where('templates_id', $templatesId)
-                ->first();
-        }
-        $templateYouYi = Cache::tags(['pushMessage', $this->key])
-            ->rememberForever('Template:SmsPush:ID:' . $templatesId, function () use ($templatesId) {
-                return TemplateYouYi::where('templates_id', $templatesId)
-                    ->first();
-            });
-
-        return $templateYouYi;
-    }
-
-    //云片模板
-    public function getTemplateContentSms()
-    {
-        $templatesId = $this->templates->getId();
-
-        if ($this->notCache) {
-            return TemplateContentSms::where('templates_id', $templatesId)
-                ->first();
-        }
-        $templateContent = Cache::tags(['pushMessage', $this->key])
-            ->rememberForever('Template:ContentSmsPush:ID:' . $templatesId, function () use ($templatesId) {
-                return TemplateContentSms::where('templates_id', $templatesId)
-                    ->first();
-            });
-
-        return $templateContent;
-    }
-
-    //阿里大于模板
-    public function getTemplateALiDaYu()
-    {
-        $templatesId = $this->templates->getId();
-
-        if ($this->notCache) {
-            return TemplateALiDaYu::where('templates_id', $templatesId)
-                ->first();
-        }
-        $templateALiDaYu = Cache::tags(['pushMessage', $this->key])
-            ->rememberForever('Template:AliDaYuSmsPush:ID:' . $templatesId, function () use ($templatesId) {
-                return TemplateALiDaYu::where('templates_id', $templatesId)
-                    ->first();
-            });
-
-        return $templateALiDaYu;
-    }
 
     private function setErrors($code, $msg)
     {

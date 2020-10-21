@@ -19,14 +19,5 @@
         "psr-4": {
             "Yinyi\\Push\\": "Push/"
         }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Yinyi\\Push\\Providers\\PushServiceProvider",
-                "Yinyi\\Push\\Providers\\JPushServiceProvider",
-                "Yinyi\\Push\\Providers\\SmsServiceProvider"
-            ]
-        }
     }
 }

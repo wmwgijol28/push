@@ -6,7 +6,7 @@
  * Time: 10:55
  */
 use Illuminate\Http\Request;
-use Ucar\Push\Push;
+use Yinyi\Push\Push;
 
 Route::get('/ucar/push/clearCacheByKey', function (Request $request){
     $key = $request->get('key');

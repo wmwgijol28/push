@@ -6,7 +6,7 @@
  * Time: 16:12
  */
 
-namespace Ucar\Push;
+namespace Yinyi\Push;
 
 interface PushCode
 {

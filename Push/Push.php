@@ -6,20 +6,13 @@
  * Time: 17:55
  */
 
-namespace Ucar\Push;
+namespace Yinyi\Push;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Ucar\Push\Jobs\AliDaYuSmsPush;
-use Ucar\Push\Jobs\ContentPush;
-use Ucar\Push\Jobs\JPush;
-use Ucar\Push\Jobs\WechatPush;
-use Ucar\Push\Jobs\YouYiSmsPush;
-use Ucar\Push\Jobs\YunPianPush;
-use Ucar\Push\Models\MessageConsumption;
-use Ucar\Push\Models\MessageCredit;
-use Ucar\Push\Models\MessageIou;
-use Ucar\Push\Models\MessageServeInforms;
+use Yinyi\Push\Jobs\JPush;
+use Yinyi\Push\Jobs\WechatPush;
+use Yinyi\Push\Jobs\YunPianPush;
 
 class Push
 {
@@ -51,37 +44,14 @@ class Push
             $this->JiGuangPush();
         }
 
-        if ($this->info->canPushToALiDaYu()) {
-            $this->ALiDaYuPush();
-        }
-
         if ($this->info->canPushToYunPian()) {
             $this->YunPianPush();
-        }
-
-        if ($this->info->canPushToYouYi()) {
-            $this->YouYiPush();
         }
 
         if ($this->info->canPushToWeChat()) {
             $this->WeChatPush();
         }
 
-        if ($this->info->CanPushToMessageConsumption()) {
-            $this->MessageConsumptionPush();
-        }
-
-        if ($this->info->CanPushToMessageCredit()) {
-            $this->MessageCreditPush();
-        }
-
-        if ($this->info->CanPushToMessageIou()) {
-            $this->MessageIouPush();
-        }
-
-        if ($this->info->CanPushToMessageServeInforms()) {
-            $this->MessageServeInformsPush();
-        }
         $this->writeLog();
 
         return $this->info;
@@ -93,85 +63,6 @@ class Push
         return $this->push($key, $to, $param, $url);
     }
 
-    private function MessageConsumptionPush()
-    {
-        $template = $this->info->getTemplateConsumption();
-
-        if ($template) {
-            $content = $this->replaceContent($template->data);
-
-            $model = new MessageConsumption();
-            $model->user_id = $this->info->getUserId();
-            $model->url = $this->info->getUrl() ?: $template->url ?: '';
-            $model->action = $template->action;
-            $model->title = $template->title;
-            $model->first = $template->first;
-            $model->remark = $template->remark;
-            $model->data = $content;
-
-            $send = $model->save();
-
-            $this->info->setResult('MessageConsumption', $send);
-        }
-    }
-
-    private function MessageCreditPush()
-    {
-        $template = $this->info->getTemplateCredit();
-        if ($template) {
-            $content = $this->replaceContent($template->content);
-
-            $model = new MessageCredit();
-            $model->user_id = $this->info->getUserId();
-            $model->title = $template->title;
-            $model->content = $content;
-            $model->type = $template->type;
-            $model->url = $this->info->getUrl() ?: $template->url ?: '';
-
-            $send = $model->save();
-
-            $this->info->setResult('MessageCredit', $send);
-        }
-    }
-
-    private function MessageIouPush()
-    {
-        $template = $this->info->getTemplateIou();
-        if ($template) {
-            $content = $this->replaceContent($template->sub_title);
-
-            $model = new MessageIou();
-            $model->user_id = $this->info->getUserId();
-            $model->color = $template->color;
-            $model->action = $template->action;
-            $model->main_title = $template->main_title;
-            $model->sub_title = $content;
-            $model->total_amount = ($this->info->getParam()['amount'] * 100) ?? 0;
-            $model->url = $this->info->getUrl() ?: $template->url ?: '';
-
-            $send = $model->save();
-
-            $this->info->setResult('MessageIou', $send);
-        }
-    }
-
-    private function MessageServeInformsPush()
-    {
-        $template = $this->info->getTemplateServeInforms();
-        if ($template) {
-            $content = $this->replaceContent($template->sub_title);
-
-            $model = new MessageServeInforms();
-            $model->user_id = $this->info->getUserId();
-            $model->main_title = $template->main_title;
-            $model->sub_title = $content;
-            $model->url = $this->info->getUrl() ?: $template->url ?: '';
-
-            $send = $model->save();
-
-            $this->info->setResult('MessageServeInforms', $send);
-        }
-    }
 
     /**
      * 极光推送
@@ -195,24 +86,6 @@ class Push
         }
     }
 
-    /**
-     * 阿里大于推送
-     */
-    private function ALiDaYuPush()
-    {
-        $template = $this->info->getTemplateALiDaYu();
-        if ($template) {
-            $send = [
-                'user_id' => $this->info->getUserId(),
-                'mobile' => $this->info->getMobile(),
-                'type' => $this->info->getKey(),
-                'template' => $template->template_key,
-                'data' => json_encode($this->info->getParam()),
-            ];
-            dispatch(new AliDaYuSmsPush($send));
-            $this->info->setResult('ALiDaYu', $send);
-        }
-    }
 
     /**
      * 云片网推送
@@ -254,25 +127,6 @@ class Push
         }
     }
 
-    /**
-     * 有易推送
-     */
-    private function YouYiPush()
-    {
-
-        $templateYouYi = $this->info->getTemplateYouYi();
-        if ($templateYouYi) {
-            $content = $this->replaceContent($templateYouYi->content);
-            $send = [
-                'user_id' => $this->info->getUserId(),
-                'mobile' => $this->info->getMobile(),
-                'type' => $this->info->getKey(),
-                'content' => $content,
-            ];
-            dispatch(new YouYiSmsPush($send));
-            $this->info->setResult('YouYi', $send);
-        }
-    }
 
     /**
      * 替换推送内容

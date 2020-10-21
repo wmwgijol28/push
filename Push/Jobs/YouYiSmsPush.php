@@ -1,6 +1,6 @@
 <?php
 
-namespace Ucar\Push\Jobs;
+namespace Yinyi\Push\Jobs;
 
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;

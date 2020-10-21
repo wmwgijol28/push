@@ -1,6 +1,6 @@
 <?php
 
-namespace Ucar\Push\Jobs;
+namespace Yinyi\Push\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

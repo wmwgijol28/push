@@ -6,7 +6,7 @@
  * Time: 17:49
  */
 
-namespace Ucar\Push\Models;
+namespace Yinyi\Push\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
