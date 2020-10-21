@@ -1,5 +1,5 @@
 {
-    "name": "yinyi/push",
+    "name": "Yinyi/Push",
     "description": "推送",
     "authors": [
         {
@@ -17,21 +17,16 @@
     },
     "autoload": {
         "psr-4": {
-            "Ucar\\Push\\": "Push/",
-            "Toplan\\PhpSms\\": "Agent/"
+            "Yinyi\\Push\\": "Push/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Ucar\\Push\\Providers\\PushServiceProvider",
-                "Ucar\\Push\\Providers\\JPushServiceProvider",
-                "Ucar\\Push\\Providers\\SmsServiceProvider",
-                "Toplan\\PhpSms\\PhpSmsServiceProvider"
-            ],
-            "aliases": {
-                "PhpSms": "Toplan\\PhpSms\\Facades\\Sms"
-            }
+                "Yinyi\\Push\\Providers\\PushServiceProvider",
+                "Yinyi\\Push\\Providers\\JPushServiceProvider",
+                "Yinyi\\Push\\Providers\\SmsServiceProvider",
+            ]
         }
     }
 }
