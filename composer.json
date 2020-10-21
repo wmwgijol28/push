@@ -1,0 +1,37 @@
+{
+    "name": "yinyi/push",
+    "description": "推送",
+    "authors": [
+        {
+            "name": "尹逸",
+            "email": "404719656@qq.com"
+        }
+    ],
+    "require": {
+        "jpush/jpush": "3.5",
+        "overtrue/laravel-wechat": "^4.0",
+        "toplan/phpsms": "~1.8"
+    },
+    "require-dev": {
+      "laravel/framework": "^6.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ucar\\Push\\": "Push/",
+            "Toplan\\PhpSms\\": "Agent/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ucar\\Push\\Providers\\PushServiceProvider",
+                "Ucar\\Push\\Providers\\JPushServiceProvider",
+                "Ucar\\Push\\Providers\\SmsServiceProvider",
+                "Toplan\\PhpSms\\PhpSmsServiceProvider"
+            ],
+            "aliases": {
+                "PhpSms": "Toplan\\PhpSms\\Facades\\Sms"
+            }
+        }
+    }
+}
