@@ -9,7 +9,7 @@
     ],
     "require": {
         "jpush/jpush": "3.5",
-        "overtrue/laravel-wechat": "^4.0",
+        "overtrue/laravel-wechat": "^5.0",
         "toplan/phpsms": "~1.8"
     },
     "require-dev": {
