@@ -25,7 +25,7 @@
             "providers": [
                 "Yinyi\\Push\\Providers\\PushServiceProvider",
                 "Yinyi\\Push\\Providers\\JPushServiceProvider",
-                "Yinyi\\Push\\Providers\\SmsServiceProvider",
+                "Yinyi\\Push\\Providers\\SmsServiceProvider"
             ]
         }
     }
