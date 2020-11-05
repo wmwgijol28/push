@@ -12,12 +12,12 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Yinyi\Push\PushCode;
-use Yinyi\Push\PushOption\Common\PushLog;
+use Yinyi\Push\PushOption\Common\wechat;
 
 
 class WechatTemplateJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, PushLog;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, wechat;
 
     protected static $token;
 

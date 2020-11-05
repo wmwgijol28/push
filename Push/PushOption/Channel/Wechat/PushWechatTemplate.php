@@ -5,12 +5,11 @@ namespace Yinyi\Push\PushOption\Channel\Wechat;
 
 
 use Yinyi\Push\Jobs\WechatTemplateJob;
-use Yinyi\Push\PushOption\Common\PushLog;
 use Yinyi\Push\PushOption\Common\wechat;
 
 class PushWechatTemplate implements PushWechatInterface
 {
-    use wechat, PushLog;
+    use wechat;
 
     private $appid;
 
