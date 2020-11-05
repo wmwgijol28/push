@@ -9,7 +9,8 @@
     ],
     "require": {
         "jpush/jpush": "3.5",
-        "overtrue/laravel-wechat": "^5.0"
+        "overtrue/laravel-wechat": "^5.0",
+        "toplan/phpsms": "~1.8"
     },
     "require-dev": {
       "laravel/framework": "^6.2"
@@ -17,6 +18,9 @@
     "autoload": {
         "psr-4": {
             "Yinyi\\Push\\": "Push/"
-        }
-    }
+        },
+        "files": [
+            "Push/helper.php"
+        ]
+    },
 }
