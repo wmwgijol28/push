@@ -55,7 +55,7 @@ class Push
 
         if($this->info->canPushTowx()){
             PushJobFactory::createOption('wx', 'wx', $this->info->getTemplateType())
-                ->init($this->info->getMiniOpenid(), $this->info->getTemplate(), $param)
+                ->init($to, $this->info->getTemplate(), $param)
                 ->handle();
         }
 

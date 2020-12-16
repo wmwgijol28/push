@@ -204,11 +204,6 @@ class PushInfo
             return false;
         }
 
-        if(!$user = $this->getMiniOpenid()){
-            $this->setErrors('wx', PushCode::WECHAT_OPEN_ID_MISSING, '未发现对应手机号openid');
-            return false;
-        }
-
         $this->template = $template;
         return true;
     }

@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Yinyi\Push\Models\User;
 use Yinyi\Push\PushCode;
 use Yinyi\Push\PushOption\Common\wechat;
 
@@ -24,6 +25,8 @@ class WechatTemplateJob implements ShouldQueue
     protected static $client = null;
 
     private $host = 'https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?';
+
+    protected $phone;
 
     protected $params;
 
@@ -41,9 +44,10 @@ class WechatTemplateJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($params, $logId)
+    public function __construct($phone, $params, $logId)
     {
         $this->params = $params;
+        $this->phone = $phone;
         $this->logId = $logId;
         $this->onQueue('wechat');
     }
@@ -55,6 +59,12 @@ class WechatTemplateJob implements ShouldQueue
      */
     public function handle()
     {
+        $openId = User::query()->with(['oauth'])->where('phone', $this->phone)->first()->toArray()['oauth']['wx_mini_openid'];
+        if(empty($openId)){
+            ApiException::throwError(PushCode::WECHAT_OPEN_ID_MISSING, '未发现用户的openid');
+        }
+
+        $this->params['touser'] = $openId;
         $client = $this->getClient();
         $url = $this->host. 'access_token='. $this->getToken();
         $response = $client->request('post', $url, [

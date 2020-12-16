@@ -13,16 +13,16 @@ class PushWechatTemplate implements PushWechatInterface
 
     private $appid;
 
-    private $openid;
+    private $phone;
 
     private $template;
 
     private $params;
 
-    public function init($openid, $template, $params = [])
+    public function init($phone, $template, $params = [])
     {
         $this->appid = config('wechat.official_account.app_id');
-        $this->openid = $openid;
+        $this->phone = $phone;
         $this->template = $template;
         $this->params = $params;
         return $this;
@@ -31,12 +31,24 @@ class PushWechatTemplate implements PushWechatInterface
     public function handle()
     {
         $temp_id = $this->template['id'];
-        $this->template = $this->replaceContent($this->template, $this->params);
-        $params = json_decode($this->template, JSON_UNESCAPED_UNICODE);
-        $params['touser'] = $this->openid;
         $params['mp_template_msg']['appid'] = $this->appid;
+        $params['mp_template_msg']['template_id'] = $this->template['template_id'];
+        $this->setUrlParams($params);
+        $params['mp_template_msg']['data'] = json_decode($this->replaceContent($this->template, $this->params), JSON_UNESCAPED_UNICODE);;
 
         $logId = $this->writeLog($this->openid, $temp_id, json_encode($params, JSON_UNESCAPED_UNICODE));
-        dispatch(new WechatTemplateJob($params, $logId));
+        dispatch(new WechatTemplateJob($this->phone, $params, $logId));
+    }
+
+
+    private function setUrlParams(&$params)
+    {
+        if($this->template['url_type'] == 1){
+            $params['mp_template_msg']['miniprogram']['appid'] = $this->appid;
+            $params['mp_template_msg']['miniprogram']['pagepath'] = $this->template['url'];
+        }
+        if($this->template['url_type'] == 2){
+            $params['mp_template_msg']['url'] = $this->template['url'];
+        }
     }
 }
