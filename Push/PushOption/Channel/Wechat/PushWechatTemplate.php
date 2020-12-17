@@ -44,7 +44,8 @@ class PushWechatTemplate implements PushWechatInterface
     private function setUrlParams(&$params)
     {
         if($this->template['url_type'] == 1){
-            $params['mp_template_msg']['miniprogram']['appid'] = $this->appid;
+
+            $params['mp_template_msg']['miniprogram']['appid'] = config('wechat.mini_program.tym.app_id');
             $params['mp_template_msg']['miniprogram']['pagepath'] = $this->template['url'];
         }
         if($this->template['url_type'] == 2){

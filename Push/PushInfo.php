@@ -265,12 +265,6 @@ class PushInfo
         return $user['uid'] ?? null;
     }
 
-    public function getMiniOpenid()
-    {
-        $user = $this->getUser();
-        return $user['wx_mini_openid'] ?? null;
-    }
-
 
     private function setErrors($channel, $code, $msg)
     {
