@@ -76,7 +76,7 @@ class WechatTemplateJob implements ShouldQueue
         }
         $result = json_decode($response->getBody()->getContents(), JSON_UNESCAPED_UNICODE);
         if($result['errcode']){
-            ApiException::throwError(PushCode::SEND_FAILD, $result['errmsg']);
+            ApiException::throwError($result['errcode'], $result['errmsg']);
         }
         $this->updateLog($this->logId, 1, 'success');
 

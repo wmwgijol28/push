@@ -49,7 +49,7 @@ class Push
         }
         if($this->info->canPushToApp()){
             PushJobFactory::createOption('app', 'tym', $this->info->getTemplateType())
-            ->init($this->info->getUid(), $this->info->getTemplate(), $param)
+            ->init($to, $this->info->getTemplate(), $param)
             ->handle();
         }
 

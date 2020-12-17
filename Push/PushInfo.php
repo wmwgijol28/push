@@ -175,10 +175,6 @@ class PushInfo
             $this->setErrors('app', PushCode::NOT_FIND_KEYWORD, '缺少keyword参数');
             return false;
         }
-        if(!$user = $this->getUid()){
-            $this->setErrors('app', PushCode::USER_ID_MISSING, '未发现对应手机号用户');
-            return false;
-        }
 
         $this->template = $template;
         return true;
@@ -240,29 +236,6 @@ class PushInfo
             ->rememberForever($key, function () use ($templateId, $model) {
                 return $model::query()->where('config_id', $templateId)->first();
             });
-    }
-
-
-    private function getUser()
-    {
-        if($this->user){
-            return $this->user;
-        }
-        if(!$uid = User::query()->where('phone', $this->to)->value('uid')){
-            return null;
-        }
-        $this->user['uid'] = $uid;
-        if(!$user = UserOauth::query()->where('uid', $uid)->first()){
-            return $this->user;
-        }
-        $this->user = $user->toArray();
-        return $this->user;
-    }
-
-    public function getUid()
-    {
-        $user = $this->getUser();
-        return $user['uid'] ?? null;
     }
 
 

@@ -21,7 +21,6 @@ class Kernel
     const APP_ACTIVE_MSG_SEND = 1;      //app优惠活动通知
     const APP_SYSTEM_MSG_SEND = 2;      //app系统消息通知
     const APP_INTER_MSG_SEND = 3;      //app互动消息通知
-    const APP_EXPRESS_MSG_SEND = 4;      //app互动消息通知
 
     const PHONE_JPUSH_MSG_SEND = 1;      //app互动消息通知
 
@@ -42,7 +41,6 @@ class Kernel
                 self::APP_ACTIVE_MSG_SEND => ActiveMsgSend::class,
                 self::APP_SYSTEM_MSG_SEND => SystemMsgSend::class,
                 self::APP_INTER_MSG_SEND => InterMsgSend::class,
-                self::APP_EXPRESS_MSG_SEND => ExpressMsgSend::class,
             ]
         ],
         'phone' => [
