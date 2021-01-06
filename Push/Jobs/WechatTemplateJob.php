@@ -92,7 +92,7 @@ class WechatTemplateJob implements ShouldQueue
         if(self::$token && $flag){
             return self::$token;
         }
-        $app = Factory::miniProgram(config('wechat.mini_program.tym'));
+        $app = Factory::miniProgram(getConfig('wechat_mini_program'));
         self::$token = $app->access_token->getToken(true)['access_token'];
         return self::$token;
     }
