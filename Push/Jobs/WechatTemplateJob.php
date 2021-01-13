@@ -11,16 +11,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 use Yinyi\Push\Models\User;
 use Yinyi\Push\PushCode;
 use Yinyi\Push\PushOption\Common\wechat;
+use Illuminate\Support\Facades\Redis;
 
 
 class WechatTemplateJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, wechat;
 
-    protected static $token;
+    protected static $redis;
 
     protected static $client = null;
 
@@ -31,6 +33,8 @@ class WechatTemplateJob implements ShouldQueue
     protected $params;
 
     protected $logId;
+
+    protected $cacheKey;
 
     /**
      * The number of times the job may be attempted.
@@ -49,6 +53,7 @@ class WechatTemplateJob implements ShouldQueue
         $this->params = $params;
         $this->phone = $phone;
         $this->logId = $logId;
+        $this->cacheKey = config('push.wx_cache_key');
         $this->onQueue('wechat');
     }
 
@@ -65,16 +70,12 @@ class WechatTemplateJob implements ShouldQueue
         }
 
         $this->params['touser'] = $openId;
-        $client = $this->getClient();
-        $url = $this->host. 'access_token='. $this->getToken();
-        $response = $client->request('post', $url, [
-            'body' => json_encode((object)$this->params)
-        ]);
+        $result = $this->requestWx();
 
-        if($response->getStatusCode() != 200){
-            ApiException::throwError(PushCode::SEND_FAILD, '发送失败');
+        if($result['errcode'] == '40001'){
+            $result = $this->requestWx(true);
         }
-        $result = json_decode($response->getBody()->getContents(), JSON_UNESCAPED_UNICODE);
+
         if($result['errcode']){
             ApiException::throwError($result['errcode'], $result['errmsg']);
         }
@@ -89,12 +90,19 @@ class WechatTemplateJob implements ShouldQueue
 
     private function getToken($flag = false) :string
     {
-        if(self::$token && $flag){
-            return self::$token;
+        if(!self::$redis){
+            self::$redis = Redis::connection('business');
         }
+
+        $token = self::$redis->get($this->cacheKey);
+        if($token && !$flag){
+            return $token;
+        }
+
         $app = Factory::miniProgram(getConfig('wechat_mini_program'));
-        self::$token = $app->access_token->getToken(true)['access_token'];
-        return self::$token;
+        $token = $app->access_token->getToken(true)['access_token'];
+        self::$redis->set($this->cacheKey, $token, 'EX', 7200);
+        return $token;
     }
 
     private function getClient($flag = false) : Client
@@ -104,5 +112,19 @@ class WechatTemplateJob implements ShouldQueue
         }
         self::$client = new Client();
         return self::$client;
+    }
+
+    public function requestWx($flag = false)
+    {
+        $client = $this->getClient();
+        $url = $this->host. 'access_token='. $this->getToken($flag);
+        $response = $client->request('post', $url, [
+            'body' => json_encode((object)$this->params)
+        ]);
+
+        if($response->getStatusCode() != 200){
+            ApiException::throwError(PushCode::SEND_FAILD, '发送失败');
+        }
+        return json_decode($response->getBody()->getContents(), JSON_UNESCAPED_UNICODE);
     }
 }
