@@ -19,12 +19,15 @@ class PushWechatTemplate implements PushWechatInterface
 
     private $params;
 
-    public function init($phone, $template, $params = [])
+    private $urlParams;
+
+    public function init($phone, $template, $params = [], $urlParams = [])
     {
         $this->appid = getConfig('wechat_official_account')['app_id'];
         $this->phone = $phone;
         $this->template = $template;
         $this->params = $params;
+        $this->urlParams = $urlParams;
         return $this;
     }
 
@@ -45,10 +48,19 @@ class PushWechatTemplate implements PushWechatInterface
     {
         if($this->template['url_type'] == 1){
             $params['mp_template_msg']['miniprogram']['appid'] = getConfig('wechat_mini_program')['app_id'];
-            $params['mp_template_msg']['miniprogram']['path'] = $this->template['url'];
+            $params['mp_template_msg']['miniprogram']['path'] = $this->setUrl();
         }
         if($this->template['url_type'] == 2){
             $params['mp_template_msg']['url'] = $this->template['url'];
         }
+    }
+
+
+    private function setUrl()
+    {
+        if(!$this->urlParams){
+            return $this->template['url'];
+        }
+        return $this->template['url']. '?'. join('&', configArray($this->urlParams));
     }
 }

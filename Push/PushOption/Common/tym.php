@@ -11,6 +11,7 @@ trait tym
     private $phone;
     private $template;
     private $params;
+    private $urlParams;
 
     /**
      * 替换推送内容
@@ -29,11 +30,13 @@ trait tym
         return $content;
     }
 
-    public function init($phone, $template, $params = [])
+
+    public function init($phone, $template, $params = [], $urlParams = [])
     {
         $this->phone = $phone;
         $this->template = $template;
         $this->params = $params;
+        $this->urlParams = $urlParams;
         return $this;
     }
 
@@ -43,9 +46,18 @@ trait tym
             'type' => $this->template['type'],
             'title' => $this->template['title'],
             'content' => $this->replaceContent($this->template, $this->params),
-            'url' => $this->template['url'],
+            'url' => $this->setUrl(),
             'url_type' => $this->template['url_type']
         ];
         dispatch(new AppTemplateJob($this->phone, $data));
+    }
+
+
+    private function setUrl()
+    {
+        if(in_array($this->template['url_type'], [0, 2]) || !$this->urlParams){
+            return $this->template['url'];
+        }
+        return $this->template['url']. '?'. join('&', configArray($this->urlParams));
     }
 }

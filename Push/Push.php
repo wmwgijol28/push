@@ -34,7 +34,7 @@ class Push
      *
      * @return object|PushInfo
      */
-    public function push($key, $to, $param = [])
+    public function push($key, $to, $param = [], $url_param = [])
     {
         $this->info = new PushInfo($key, $to, $param);
 
@@ -44,18 +44,18 @@ class Push
 
         if($this->info->canPushToSms()){
             PushJobFactory::createOption('sms', 'jpush', $this->info->getTemplateType())
-                ->init($to, $this->info->getTemplate(), $param)
+                ->init($to, $this->info->getTemplate(), $param, $url_param)
                 ->handle();
         }
         if($this->info->canPushToApp()){
             PushJobFactory::createOption('app', 'tym', $this->info->getTemplateType())
-            ->init($to, $this->info->getTemplate(), $param)
-            ->handle();
+                ->init($to, $this->info->getTemplate(), $param, $url_param)
+                ->handle();
         }
 
         if($this->info->canPushTowx()){
             PushJobFactory::createOption('wx', 'wx', $this->info->getTemplateType())
-                ->init($to, $this->info->getTemplate(), $param)
+                ->init($to, $this->info->getTemplate(), $param, $url_param)
                 ->handle();
         }
 
