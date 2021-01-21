@@ -10,7 +10,7 @@
     "require": {
         "jpush/jpush": "3.5",
         "overtrue/laravel-wechat": "^5.0",
-        "jenssegers/mongodb": "v3.6.0",
+        "jenssegers/mongodb": "v3.6.0"
     },
     "require-dev": {
       "laravel/framework": "^6.2"
