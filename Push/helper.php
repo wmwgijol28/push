@@ -22,3 +22,12 @@ function getConfig($code)
     \Illuminate\Support\Facades\Cache::put($key, $config);
     return $config;
 }
+
+function configArray($arr)
+{
+    $res = [];
+    foreach ($arr as $key => $value){
+        $res[] = "$key=$value";
+    }
+    return $res;
+}
