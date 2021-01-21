@@ -11,7 +11,6 @@
         "jpush/jpush": "3.5",
         "overtrue/laravel-wechat": "^5.0",
         "jenssegers/mongodb": "v3.6.0",
-        "toplan/phpsms": "~1.8"
     },
     "require-dev": {
       "laravel/framework": "^6.2"

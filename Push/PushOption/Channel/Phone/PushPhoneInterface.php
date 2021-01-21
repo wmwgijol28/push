@@ -1,5 +1,5 @@
 <?php
-namespace Yinyi\Push\PushOption\sms;
+namespace Yinyi\Push\PushOption\Channel\Phone;
 
 Interface PushPhoneInterface
 {
