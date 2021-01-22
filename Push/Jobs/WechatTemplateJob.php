@@ -54,7 +54,7 @@ class WechatTemplateJob implements ShouldQueue
         $this->phone = $phone;
         $this->logId = $logId;
         $this->cacheKey = config('push.wx_cache_key');
-        $this->onQueue('wechat');
+        $this->onQueue('{message_wechat}');
     }
 
     /**

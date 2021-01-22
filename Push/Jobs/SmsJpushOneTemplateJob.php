@@ -42,7 +42,7 @@ class SmsJpushOneTemplateJob implements ShouldQueue
         $this->url = 'https://api.sms.jpush.cn/v1/messages';
         $this->params = $params;
         $this->logId = $logId;
-        $this->onQueue('sms');
+        $this->onQueue('{message_sms}');
     }
 
     /**

@@ -41,7 +41,7 @@ class AppTemplateJob implements ShouldQueue
     {
         $this->params = $params;
         $this->phone = $phone;
-        $this->onQueue('message_app');
+        $this->onQueue('{message_app}');
     }
 
     /**
