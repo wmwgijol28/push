@@ -5,9 +5,14 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 class PublicSystemErrorLog extends Model
 {
-    protected $connection = 'mongodb';
     protected $collection = 'public_system_error_log';
     protected $primaryKey = '_id';    //设置id
+
+    function __construct(array $attributes = [])
+    {
+        $this->connection = confing('push.mongodb.connection');
+        parent::__construct($attributes);
+    }
 
     public static function writeLog($key, $to, $channel, $code, $msg)
     {
