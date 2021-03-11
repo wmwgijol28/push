@@ -10,7 +10,7 @@ class PublicSmsLog extends Model
 
     function __construct(array $attributes = [])
     {
-        $this->connection = confing('push.mongodb.connection');
+        $this->connection = config('push.mongodb.connection');
         parent::__construct($attributes);
     }
 
