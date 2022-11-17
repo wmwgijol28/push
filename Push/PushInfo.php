@@ -71,7 +71,7 @@ class PushInfo
     /**
      *
      * @param $key   string 消息推送时使用的key
-     * @param $to    array user_id、mobile、registration_id（极光推送客户端id）、wechat_open_id（微信open_id）
+     * @param $to    string user_id、mobile、registration_id（极光推送客户端id）、wechat_open_id（微信open_id）
      * @param $param array 替换推送内容所用到的数组
      */
     public function __construct($key, $to, $param)
@@ -203,6 +203,31 @@ class PushInfo
         $this->template = $template;
         return true;
     }
+
+
+    public function canPushToPhone()
+    {
+        $config = $this->config;
+        if(!$config['is_phone']){
+            return false;
+        }
+
+        $template = $this->setTemplate('phone');
+        if(empty($template)){
+            $this->setErrors('phone', PushCode::TEMPLATE_MISSING, '未发现对应的推送模板');
+            return false;
+        }
+        $template = $template->toArray();
+
+        if(!$this->checkKeywords($template)){
+            $this->setErrors('phone', PushCode::NOT_FIND_KEYWORD, '缺少keyword参数');
+            return false;
+        }
+
+        $this->template = $template;
+        return true;
+    }
+
 
     public function getErrors()
     {

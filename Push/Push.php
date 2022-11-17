@@ -59,6 +59,12 @@ class Push
                 ->handle();
         }
 
+        if($this->info->canPushToPhone()){
+            PushJobFactory::createOption('phone', 'jpush', $this->info->getTemplateType())
+                ->init($to, $this->info->getTemplate(), $param, $url_param)
+                ->handle();
+        }
+
         return true;
 
     }

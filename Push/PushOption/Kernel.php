@@ -4,11 +4,10 @@
 namespace Yinyi\Push\PushOption;
 
 
-use phpDocumentor\Reflection\Types\Integer;
 use Yinyi\Push\PushOption\Channel\App\ActiveMsgSend;
-use Yinyi\Push\PushOption\Channel\App\ExpressMsgSend;
 use Yinyi\Push\PushOption\Channel\App\InterMsgSend;
 use Yinyi\Push\PushOption\Channel\App\SystemMsgSend;
+use Yinyi\Push\PushOption\Channel\Phone\JpushPhoneMsgSend;
 use Yinyi\Push\PushOption\Channel\Sms\JPushOneTemplateSend;
 use Yinyi\Push\PushOption\Channel\Wechat\PushWechatTemplate;
 
@@ -45,7 +44,7 @@ class Kernel
         ],
         'phone' => [
             'jpush' => [
-                self::PHONE_JPUSH_MSG_SEND => null
+                self::PHONE_JPUSH_MSG_SEND => JpushPhoneMsgSend::class
             ]
         ],
     ];

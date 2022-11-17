@@ -15,7 +15,7 @@ use Yinyi\Push\PushOption\Common\sms;
 
 class SmsJpushOneTemplateJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Jpush, sms;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, sms;
 
     protected $method;
 

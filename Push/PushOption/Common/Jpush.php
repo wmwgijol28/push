@@ -1,40 +1,44 @@
 <?php
 namespace Yinyi\Push\PushOption\Common;
 
-use App\Exceptions\ApiException;
-use Facade\FlareClient\Api;
-use GuzzleHttp\Client;
-use Yinyi\Push\PushCode;
+use JPush\Client;
+use Yinyi\Push\Mongo\PublicPhoneLog;
+
 
 trait Jpush
 {
-    private $appKey;
-    private $masterSecret;
+    private  $client;
 
     private function init()
     {
-        $config = config('jpush');
-        $this->appKey = $config['app_key'];
-        $this->masterSecret = $config['master_secret'];
+        $config = config('push.jpush');
+        $this->client = new Client($config['app_key'], $config['master_secret']);
     }
 
-    private function getBasicValue()
+    /**
+     * 更新状态
+     */
+    private function updateLog($logId, $status, $rmk)
     {
-        return base64_encode($this->appKey. ':'. $this->masterSecret);
+        PublicPhoneLog::query()->where('_id', $logId)->update(['status' => $status, 'rmk' => $rmk]);
     }
 
-    private function httpRequest($method, $url, $params)
+    /**
+     * 写日志
+     */
+    private function writeLog($phone, $tempId, $content)
     {
-        $client = new Client();
-        $response = $client->request($method, $url, [
-            'headers' => [
-                'Authorization' => 'Basic '. $this->getBasicValue(),
-            ],
-            'form_params' => $params
-        ]);
-        if($response->getStatusCode() != 200){
-            ApiException::throwError(PushCode::SEND_FAILD, '链接失败');
-        }
-        return $response->getBody()->getContents();
+        $log = [
+            'phone' => $phone,
+            'template_id' => $tempId,
+            'content' => $content,
+            'status' => 0,
+            'rmk' => '',
+            'methot' => 'system',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+        return PublicPhoneLog::query()->insertGetId($log);
     }
+
 }

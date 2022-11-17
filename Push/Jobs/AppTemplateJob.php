@@ -3,9 +3,6 @@
 namespace Yinyi\Push\Jobs;
 
 use App\Exceptions\ApiException;
-use Carbon\Carbon;
-use EasyWeChat\Factory;
-use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,7 +11,6 @@ use Illuminate\Queue\SerializesModels;
 use Yinyi\Push\Models\PublicAppMsg;
 use Yinyi\Push\Models\User;
 use Yinyi\Push\PushCode;
-use Yinyi\Push\PushOption\Common\wechat;
 
 
 class AppTemplateJob implements ShouldQueue
