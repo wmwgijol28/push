@@ -65,15 +65,14 @@ class PhoneTemplateJob implements ShouldQueue
             'title' => $this->content['title'],
         );
         if($this->content['url']){
-            $android_notification['intent'] = [];
-            $android_notification['extras'] = [
-                'skip' => json_encode([
-                    'skip_type' => 2,
-                    'skip_value' => [
-                        'path' => $this->content['url'],
-                        'cType' => 0
-                    ]
-                ], JSON_UNESCAPED_UNICODE)
+            $android_notification['intent'] = [
+                'url' => 'tym_jpush://jpush_skip?skip='. json_encode([
+                        'skip_type' => 2,
+                        'skip_value' => [
+                            'path' => $this->content['url'],
+                            'cType' => 0
+                        ]
+                    ], JSON_UNESCAPED_UNICODE)
             ];
         }
 
