@@ -64,7 +64,7 @@ class WechatTemplateJob implements ShouldQueue
      */
     public function handle()
     {
-        $openId = User::query()->with(['oauth'])->where('phone', $this->phone)->first()->toArray()['oauth']['wx_mini_openid'];
+        $openId = User::query()->with(['oauth'])->where('phone', $this->phone)->first()->toArray()['oauth']['wx_official_openid'];
         if(empty($openId)){
             ApiException::throwError(PushCode::WECHAT_OPEN_ID_MISSING, '未发现用户的openid');
         }
@@ -99,7 +99,10 @@ class WechatTemplateJob implements ShouldQueue
             return $token;
         }
 
-        $app = Factory::miniProgram(getConfig('mini_app'));
+        $config = getConfig('wx_mp');
+
+        $app = Factory::officialAccount(['app_id' => $config['appid'],'secret' => $config['appsecret']]);
+
         $token = $app->access_token->getToken(true)['access_token'];
         self::$redis->set($this->cacheKey, $token, 'EX', 7200);
         return $token;

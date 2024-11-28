@@ -54,6 +54,9 @@ class Push
         }
 
         if($this->info->canPushTowx()){
+            if (isset($param['product'])){
+                $param['product'] = mb_substr($param['product'], 0, 20);
+            }
             PushJobFactory::createOption('wx', 'wx', $this->info->getTemplateType())
                 ->init($to, $this->info->getTemplate(), $param, $url_param)
                 ->handle();
