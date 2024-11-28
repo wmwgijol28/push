@@ -26,7 +26,7 @@ class WechatTemplateJob implements ShouldQueue
 
     protected static $client = null;
 
-    private $host = 'https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?';
+    private $host = 'https://api.weixin.qq.com/cgi-bin/message/template/send?';
 
     protected $phone;
 
@@ -99,7 +99,7 @@ class WechatTemplateJob implements ShouldQueue
             return $token;
         }
 
-        $app = Factory::miniProgram(getConfig('wechat_mini_program'));
+        $app = Factory::miniProgram(getConfig('mini_app'));
         $token = $app->access_token->getToken(true)['access_token'];
         self::$redis->set($this->cacheKey, $token, 'EX', 7200);
         return $token;

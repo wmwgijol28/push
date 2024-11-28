@@ -23,7 +23,7 @@ class PushWechatTemplate implements PushWechatInterface
 
     public function init($phone, $template, $params = [], $urlParams = [])
     {
-        $this->appid = getConfig('wechat_official_account')['app_id'];
+        $this->appid = getConfig('wx_mp')['appid'];
         $this->phone = $phone;
         $this->template = $template;
         $this->params = $params;
@@ -47,7 +47,7 @@ class PushWechatTemplate implements PushWechatInterface
     private function setUrlParams(&$params)
     {
         if($this->template['url_type'] == 1){
-            $params['mp_template_msg']['miniprogram']['appid'] = getConfig('wechat_mini_program')['app_id'];
+            $params['mp_template_msg']['miniprogram']['appid'] = getConfig('mini_app')['appid'];
             $params['mp_template_msg']['miniprogram']['path'] = $this->setUrl();
         }
         if($this->template['url_type'] == 2){
